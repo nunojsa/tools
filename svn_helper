@@ -1,0 +1,603 @@
+#!/bin/sh
+
+#AUTHOR: Nuno Sá
+#Brief:	 This script is intended to be used as an helper to svn and automatize some operations that i use more
+#as selecting all the files to commit instead of selecting one by one (based on a list with files to ignore). All the operations
+#than bring no gain/time should not be ported to this script (like committing/updating only one file).		
+
+#DEV_NOTE: Try not to run my functions within command substitution, i.e within `` or $() since this commands will be ran in a subshell and i could miss some exit status since the parent shell will only care for the status of the last command of the child (if set -e not set in the subshell) or the last command of the expression (ex: a=$(false)$(true) will lead to an exit status of 0). And, when running with set -e on the parent this same reason could lead to the parent not exiting. Normal behavior is for the parent to exit if the child return an exit status > 0. So special care is needed if i really need to use this. One solution is to use aux variables and assign them the result of my function (ex: a=$(func);), and in that case i know for sure that the exit status #? is related with myfunction and act accordingly!
+
+
+#set -u;		#-e will exit on the first error(not used since the script is intended to be sourced). -u will complain about referencing non-existing variables
+set -o pipefail;
+
+#TODO: Support more than one PATH on the svn_* functions. 
+
+#Next two variables are the ones that need to be changed if the default ignore list is to be changed!
+NUMBER_OF_DEF_FILE=3;
+DEFAULT_IGNORE_FILES="bsd09ddl.h cmbs_pram_DCX_app.c bsd09ddl.ddp";
+ignore_list=(); #default files for the project in use.
+#tn//cmp_list=();	#array with the list of files already selected in the autocomplete function.
+LAST_CI_DIR='';
+ROOT_DIR='';
+
+function __is_a_working_copy()
+{
+	[ -n "${1}" ] && [ ! -d  "${1}" ] && { echo "[ERROR]: Invalid dir \""${1}"\" "; return 1; }
+	[ -d "${1}"".svn" ] || [ -n "$(svn info "${1}" 2>/dev/null)" ] || { echo "[ERROR]: ${1} Not in a working copy!"; return 1; }
+	return 0;
+}
+
+function __get_svn_status()
+{
+	local pipe_ign='|';
+	local ign_cmd='';
+	local pipe_aux='|';
+	local grep_aux='';
+	
+	###validade parameters!
+	[ $# -gt "3" ] && { echo "Invalid number of parameters!"; return 1; }
+	[[ "${1}" == "--rmt" || "${1}" == "--lcl"|| "${1}" == "--all" ]] || { echo "Invalid parameter \""$1"\"!"; return 1; }
+	[ "${2}" != "status" ] && \
+	{ echo "[ERROR]: This function is for private use. Only one paremeter with a predefined name is allowed!"; return 1; }
+	[ -n "${3}" ] && [ ! -d "${3}" ] && { echo "[ERROR]: \""$3"\"" is not a path; return 1; }
+
+	###more validations
+	__is_a_working_copy "${3}";
+	[ $? == "0" ] || return 1; 
+	
+	__create_def_ignore_cmd ign_cmd;
+	[ $? == "0" ] || pipe_ign='';
+			
+	if [ "${1}" == "--rmt" ]
+	then
+		pipe_ign='';
+		ign_cmd='';
+		grep_aux="grep '* '";
+	elif [ "${1}" == "--lcl" ]
+	then
+		grep_aux="egrep '(^M|^A|^D|^!)'";
+	else
+		pipe_aux='';
+	fi
+	
+	#Use eval in the subshell since we will use variable substitution for the pipes operands.
+	#Without eval the subshell would substitute the pipe_aux (ex) with the literal '|' and would not see it as the pipe operand!	
+	eval "$2='$(eval "svn status -u --quiet "${3}" ${pipe_aux} ${grep_aux} ${pipe_ign} ${ign_cmd}")'";
+	return 0;
+}
+
+function __filesdir_w_opts()
+{
+	local cur toks dir;
+	#COMP_WORDS is an array that is constructed by bash with all your chosen options (autocompleted options)
+	cur="${COMP_WORDS[COMP_CWORD]}";
+	
+	if [ -n "${cur}" ]
+	then	
+		#NS: With a dirname begining with "-" this will lead to problems
+		toks=$(echo "$cur" | grep "^-");
+		if [ -n "$toks" ]
+		then
+			COMPREPLY=( $(compgen -W "${1}" -- ${cur}) );
+			return 0;
+		elif [ -f "$cur" ]
+		then	
+			#NS: Just to force moving the shell cursor.
+			COMPREPLY=( $(compgen -W "$cur" -- '') );
+			return 0;
+		fi
+	fi
+
+	#NS: At this point we are auto completing files and dirs. Give -f to compgen and nospaces and filenames (for append / on dirs)
+	#Just a minimalist way of doing auto-completion for dirs and files, not handling complex cases with strange dirnames. This is just my simple version. 
+	#For a better solution we could just call the builtin shell function _filedir and _init_completion->look at /usr/share/bash-completion/bash_completion for examples - specially _cd function;
+
+	compopt -o nospace -o filenames;
+	COMPREPLY=( $(compgen -f -- ${cur}) );
+
+}
+
+function __ci_update_complete()
+{
+	__filesdir_w_opts;
+}
+
+function __status_complete()
+{
+	__filesdir_w_opts "--rmt --all --lcl";
+}
+	
+function __diff_complete()
+{
+	__filesdir_w_opts "--rmt";
+}
+	
+function __list_complete()
+{
+	local cur i max_i;
+	local opts=();
+	local optsX=();
+	local status='';
+
+	cur="${COMP_WORDS[COMP_CWORD]}";
+	COMPREPLY=();
+	
+	__get_svn_status --lcl status; 
+
+	opts=(`echo "${status}" | awk -F" " '{printf $NF" "}'`);
+
+	#Use COM_WORDS array, it contains all the strings as we move the cursor!
+	#First index does not matter - its the name of the function being autocompleted. The last item also does not matter since its the 
+	#the current pointer(that must be moved forward) or a 0 len string!	
+	[[ ${#ignore_list[*]} == "0" && ${#COMP_WORDS[*]} -le "2" ]] || { \
+	optsX=( ${opts[*]} );
+	max_i=$(( ${#COMP_WORDS[*]} > ${#opts[*]} ? ${#COMP_WORDS[*]} : ${#opts[*]} ))
+	for i in $(seq 0 $max_i)
+	do
+		(( $i < ${#optsX[*]} )) && { __is_file_in_list $(realpath ${optsX[${i}]}) ${ignore_list[*]}; \
+		[ $? == 1 ] && opts=(${opts[*]/${optsX[${i}]}}); } 
+		
+		if (( $i+1 < ${#COMP_WORDS[*]}-1 )) 
+		then
+			opts=(${opts[*]/${COMP_WORDS[$(($i+1))]}});
+		elif [ ${#ignore_list[*]} == "0" ]
+		then
+			break;	
+		fi
+	done }
+	
+	#NOTE: When cur is a valid file, it's important for it to be on the opts array. If it is not, the bash wont move the cursor
+	#and will stay with the cursor on our current file (ofcourse we can do it with a space!). That's why
+	#i dont care about the last index on COMP_WORDS array! If i went until the last index, we would have an iteration where our cur
+	#was the selected file, but we would remove it from the opts list and compgen wouldnt like that!
+	COMPREPLY=( $(compgen -W "${opts[*]}" -- ${cur}) );
+	return 0;	
+}
+
+function __is_file_in_list()
+{
+	local i=0;
+	local aux='';
+	local file='';
+	[ $# == "0" ] && { echo "Invalid parameters"; return 1; }
+	#Should never happen-file will be ignored
+	[ ! -f "${1}" ] && { echo "[WARNING]: File "${1}" to match against the list does not exist in the working copy!"; return 2; }
+	#$1 is the input file, all the rest are the list elements
+	for i in `seq 2 $#`	
+	do	
+		#use eval, so that if we receive more than 9 parameters we won't get bad substitutions!
+		aux='${'$i'}';
+		eval file=$aux;
+		[ "${file}" == "$1" ] && return 1;
+	done
+	
+	return 0;
+}
+
+function __create_def_ignore_cmd()
+{
+	local i='';
+	local counter=0;
+	local cmd="egrep -v '";
+	
+	#NOTE: For some reason we dont need to add the ' caracther to the command, if we do the shell will escape it in a way that
+	#i sincerely dont understand and the command wont work as intended. So, i dont add here the caracther and later on, when
+	#executing the command, the bash do it for me (still to understant why!!)	
+	#However, to add here the ', i have to use eval when concatenating the comand, which makes sense. Otherwise the comand couldnt
+	#be correctly evaluated.
+	
+	[[ ${NUMBER_OF_DEF_FILE} != "0" && ${1} == "ign_cmd" ]] || return 1;
+	
+	for i in ${DEFAULT_IGNORE_FILES}
+	do
+		let counter+=1;
+		if ((${counter} == ${NUMBER_OF_DEF_FILE}))
+		then
+			#echo "Last file treated=$i";
+			cmd=${cmd}${i}"$'";
+			break;
+		else
+			cmd=${cmd}${i}"$|";
+		fi	
+	done
+	
+	eval ${1}='${cmd}'; 
+
+}
+
+function __add_ci_ignore_file()
+{
+	local abs_file='';
+	[ $# == "0" ] && { echo "Invalid parameters"; return 1; } 
+	#echo "input_file=${1}";
+	abs_file=$(realpath ${1});
+	__is_file_in_list ${abs_file} ${ignore_list[*]};
+	[ $? != "0" ] || ignore_list[${#ignore_list[@]}]=${abs_file};
+}
+
+#TODO: Need to be tested!!
+function __handle_rmt_file()
+{
+	local upd_file='';
+	local dir_name='';
+	local opt;
+	[ ${1} != "file" ] && { echo "Invalid parameters!"; return 1; }
+		
+	eval upd_file='$'${1};
+	
+	[ -d ${upd_file} ] && { echo "Update file is a dir!"; return 0; }
+
+	dir_name=$(dirname ${upd_file});
+	
+	if [ -d ${dir_name} ]
+	then
+		echo -n "Dir=${dir_name} is local. Update file=${upd_file} (y/n)? ";
+		read opt;
+		[ ${opt} == "y" ] && svn update ${upd_file};
+	else
+		echo "Dir does not exist. Update only dir";
+		[ ${dir_name} == ${upd_file} ] && echo "We have the dir as update file. Update it now??";
+	fi 
+}	
+
+function __handle_local_file()
+{
+	local char='';
+	local ch='';
+	local upd_file=''; 
+	
+	[[ ${1} != "first_char" || ${2} != "file" ]] && { echo "Invalid parameters!"; return 1; }
+
+	eval char='$'${1};
+	eval upd_file='$'${2};
+	
+	case ${char} in
+
+		"M")
+			echo "Possible conflicted file. Doing backup before merging...";
+			echo ${upd_file};
+			cp ${upd_file} ${upd_file}"_back";
+			svn update ${upd_file};		
+		;;
+		"*")
+			svn update ${upd_file};	
+		;;
+		*)
+			echo -n "Unknown option=${char}. Update file(y/n)? ";
+                        read ch;
+			[ ${ch} == "y" ] && svn update ${upd_file};
+		;;
+	esac
+}
+
+#######public functions#######
+
+function set_debug()
+{
+        set -x;
+}
+
+function unset_debug()
+{
+        set +x;
+}
+
+function set_root_dir()
+{
+	#Parameter Validations
+	[ $# -ne 1 ] && { echo "Invalid number of parameters: $#. Only one allowed!"; return 1; }
+	[ ! -d "$1" ] && { echo "Parameter "$1" is not a valid dir!"; return 1; }
+	__is_a_working_copy "$1";
+	[ $? == 1 ] && return 1;
+
+	ROOT_DIR=$(realpath "$1");
+}
+
+function add_ci_ignore()
+{
+	let local i=0;
+	local aux='';
+	local abs_file='';
+	#ignore_list=( );
+	for i in `seq 1 $#`	# $# gives the number of passed arguments
+	do
+		eval aux='${'$i'}';
+		__add_ci_ignore_file "${aux}";
+	done
+	
+}	
+complete -F __list_complete add_ci_ignore;
+
+function clean_ign_list()
+{
+	ignore_list=();
+}
+
+function print_ci_ignore()
+{
+	local i='';
+	echo "***************Selected files***************";
+	for i in ${ignore_list[*]}
+	do
+		echo "$i";
+	done
+	i='';
+	echo "***************Default  files***************";
+	for i in ${DEFAULT_IGNORE_FILES}
+        do
+                echo "$i";
+        done
+	echo "********************************************";
+}
+
+function svn_patch()
+{
+	local status='';
+	local i='';
+	local diff_list='';
+	local file="default.patch"
+	local path='';
+
+	[ $# -gt 2 ] && { echo "To many parameter=$#"; return 1; }
+	[[ -n "${1}"  && ! -d "${1}" ]] && file=${1};
+	[[ -n "${1}"  &&   -d "${1}" ]] && path=${1};
+	[[ -n "${2}"  &&   -d "${2}" ]] && [ -n "${path}" ] && { echo "Invalid second parameter="${2}""; return 1; }
+	[[ -n "${2}"  &&   -d "${2}" ]] && path=${2};
+	[[ -n "${2}"  && ! -d "${2}" ]] && [ "${file}" != "default.patch" ] && { echo "Invalid second parameter="${2}""; return 1; }
+	[[ -n "${2}"  && ! -d "${2}" ]] && file=${2}
+
+	__get_svn_status --lcl status "${path}";
+	[ -z "${status}" ] && { return 0; }
+
+	status=`echo "${status}" | awk -F" " '{printf $NF" "}'`;
+	for i in ${status}
+        do
+                __is_file_in_list $(realpath "${i}") ${ignore_list[*]}
+                if [ "$?" == "0" ]
+                then
+                        diff_list=${diff_list}" $i"
+                fi
+        done
+	
+	svn diff ${diff_list} > ${file};
+	echo "PATCHING FILES...";
+	echo ${diff_list} | tr -s " " "\n";
+}
+
+function svn_ci()
+{
+	local status='';
+	local i='';
+	local j='';
+	local ci_list='';
+	local opt='';	
+	local path='';
+	local dirs=();
+	local cur_dir=$(pwd);
+	
+	if [ -z "${ROOT_DIR}" ]
+	then	
+		echo "No Root dir set. It is important to set it when externals repositories are present and we want to commit more than one external in one svn_ci cmd!
+Without a defined Root dir, no svn update will be done after the commit";
+		echo -n "Set it now or just proceed (y/n)? "
+		read opt;
+		if [ "$opt" == "y" ]
+		then
+			echo -n "Give in root dir: ";
+			read ROOT_DIR;
+			set_root_dir "${ROOT_DIR}";
+			#ROOT_DIR=$(realpath "${ROOT_DIR}");
+			#echo "Chosen ROOT_DIR=${ROOT_DIR}";
+		fi			
+	elif [ "${cur_dir}" != "${LAST_CI_DIR}" ]
+	then
+		echo -n "Dir has changed since last commit. Root dir is: ${ROOT_DIR}! Keep it(y/n)? ";
+		read opt;
+		if [ "$opt" == "n" ]
+		then
+			echo -n "Give in root dir: ";
+			read ROOT_DIR;
+			set_root_dir "${ROOT_DIR}";	
+			#ROOT_DIR=$(realpath "${ROOT_DIR}");
+			#echo "Chosen ROOT_DIR=${ROOT_DIR}";
+		fi			
+	fi	
+		
+	LAST_CI_DIR=${cur_dir};
+
+	dirs=( $(echo "$*" ) );
+
+	if [ ${#dirs[*]} == 0 ]
+	then
+		dirs=( . );
+	fi	
+		
+	for j in ${dirs[@]}
+	do
+		if [ ! -d ${j} ]
+		then
+			echo "Invalid dir="${j}". Continue...";
+			continue;
+		fi	
+		
+		path=$(echo "${j}" | sed -e 's/\/$//')
+		__get_svn_status --lcl status "${path}/";
+		[ -z "${status}" ] && { continue; }
+	
+		echo "Status in "\"${path}/\"":";
+		echo "${status}";
+		echo "Ignore List:";
+		print_ci_ignore;
+		echo -n "Do you want to proceed (n/y)? ";
+		read opt;
+	
+		[ ${opt} == "y" ] || continue;
+	
+		status=`echo "${status}" | awk -F" " '{printf $NF" "}'`;
+
+		for i in ${status}
+		do
+			__is_file_in_list $(realpath "${i}") ${ignore_list[*]}
+			if [[ "$?" == "0" || "$?" == "2" ]]
+			then
+				ci_list=${ci_list}" $i"
+			fi	
+		done
+		
+		[ -n "${ci_list}" ] && svn ci ${ci_list};
+		[ -n "${ROOT_DIR}" ] && svn update "${ROOT_DIR}";
+	done	
+}
+complete -F __ci_update_complete svn_ci;
+
+function svn_status()
+{
+	local status='';
+	local param='--all'; #default value
+	local aux='';
+	local set_param=n;
+	local dirs=();
+        let cnt=0;
+
+	aux=$(echo "$*" | tr -s " " "\n" | grep -o "\--.*");
+
+	[ -n "${aux}" ] && param="${aux}";
+	dirs=( $(echo "$*" | tr -s " " "\n" | grep -v "\--.*") );
+
+	if (( ${#dirs[*]} == 0 ))
+	then
+		__get_svn_status $param status;
+		[ $? == 0 ] && [ -n "${status}" ] && echo "${status}";
+	else	
+		for i in ${dirs[*]}
+		do
+			[ ! -d "$i" ] && continue;
+			i=$(echo "$i" | sed -e 's/\/$//');
+			__get_svn_status $param status ${i}"/";
+			[ $? == 0 ] && [ -n "${status}" ] && echo "${status}";
+		done
+	fi
+	
+	return 0;
+}
+complete -F __status_complete svn_status;
+
+function svn_diff()
+{
+	local status='';
+	local param='';
+	local status_param='--lcl';
+	local file_list=();
+	let local i=0;
+	local break_var="y";
+	local path='';
+
+	[ $# -gt 2 ] && { echo "Invalid number($#) of parameters"; return 1; }
+	
+	[[ -n "${1}" && -d "${1}" ]] && path="${1}";
+	[[ -n "${1}" && ! -d "${1}" ]] && [ "$1" != "--rmt" ] && { echo "Invalid parameter \""$1"\"!"; return 1; } 
+	[[ -n "${1}" && ! -d "${1}" ]] && { param='-r head'; status_param='--rmt'; }
+	[[ -n "${2}" && -d "${2}" ]] && [ -n "${path}" ] && { echo "Invalid second param=$2"; return 1; }
+	[[ -n "${2}" && -d "${2}" ]] && path="${2}";
+	[[ -n "${2}" && ! -d "${2}" ]] && [ "$2" != "--rmt" ] && { echo "Invalid second parameter \""$2"\"!"; return 1; }
+	[[ -n "${2}" && ! -d "${2}" ]] && [ -n "${param}" ] && { echo "Invalid second parameter \""$2"\"!"; return 1; }
+	[[ -n "${2}" && ! -d "${2}" ]] && { param='-r head'; status_param='--rmt'; }
+
+	__get_svn_status "${status_param}" status "${path}";
+	#[ -n "$1" ] && [ "$1" != "--rmt" ] && { echo "Invalid parameter \""$1"\"!"; return 1; }
+
+	#if [ -n "$1" ]
+	#then
+	#	param='-r head';
+	#	__get_svn_status "${1}" status "${path}";	
+	#else
+	#	__get_svn_status --lcl status "${path}";
+	#fi
+	
+	if [ $? != "0" ]
+	then
+		return 1;
+	fi	
+
+	file_list=(`echo "$status" | awk -F" " '{printf $NF" "}'`);
+	while ((i < ${#file_list[@]} )) && [[ "${break_var}" == "y" || "${break_var}" == "s" ]]
+	do
+		svn diff ${param} "${file_list[i]}" | colordiff;	
+		echo -n "Diff on file=${file_list[i]}... Continue, break or continue and add file to ignore list(y/n/s)? ";
+		read break_var;
+		[ "${break_var}" == "s" ] && __add_ci_ignore_file ${file_list[i]};
+		let i+=1;
+	done
+}
+complete -F __diff_complete svn_diff;
+
+function svn_update()
+{
+	local status='';
+	local line=''
+	local file='';
+	local first_char='';
+	local cnt=0, i=0;
+	local ch='';
+	local path="";
+	
+	[ -n "${1}" ] && [ ! -d "${1}" ] && { echo "\""${1}"\" is not a valid directory" ;return 1; }
+	
+	path="${1}";
+
+	__get_svn_status --rmt status "${path}";
+	[ -n "${status}" ] || return 0;  
+	cnt=$(echo "${status}" | wc -l);
+
+	for i in `seq 1 ${cnt}`
+	do
+		line=$(echo "${status}" | sed -n ${i}p);
+		first_char=$( echo "${line}" | awk '{print $1}');
+		file=$(echo "${line}" | awk -F" " '{print $NF}');
+		
+		if [ -f ${file} ]
+		then
+			__handle_local_file first_char file; 	
+		else
+			__handle_rmt_file file;
+		fi
+	done
+	
+	#set correct revision number after update all the files
+	svn update "${path}";
+}
+complete -F __ci_update_complete svn_update;
+
+function svn_help()
+{
+	echo "Usage: function [PATHS...] opts
+  There is no special order between opts and path.
+  If no path is provided current directory is assumed. Always recursive operations.
+  Only svn_* functions use PATH as argument.
+
+[FUNCTION] 		[PARAMS]  	[DESC]
+svn_status		--all		Run svn status with --quiet and -u and ignore default ignore list. 
+					Default when no parameter is given.
+			--lcl		Only get changed files in the working copy.
+			--rmt		Only get remote files that need to be updated (marked with *).
+svn_ci			--none--	Commit the files changed on the working copy. See "set_root_dir" command.
+					Files on the ignore or in the default ignore list will be ignored.
+svn_diff		--none--	Diffs all the files changed in the working copy.
+					User can break the diff loop or add files to the ignore list in an interactive way.
+			--rmt		Diffs the files in the head revision that are not updated in the working copy.
+svn_patch		--file-name	Creates a patch according with the changed files on the working copy. If there are files in the
+					ignore list, those will be discarded. If no file name is provided a default.patch is created.
+print_ci_ignore 	--none--	Prints out your ignore and default ignore list. Files in default ignore list will be
+					always ignored. If need to change the default list, change svn_helper script.
+clean_ign_list		--none--	Clean ignore list.
+add_ci_ignore		--files-to-add	Add files to the ignore list. If tab is pressed, all the possible options are displayed.
+set_debug		--none--	Same as set -x.
+unset_debug		--none--	Same as set +x.
+set_root_dir		directory	Set a current directory which will be seen as the root dir for the current project. 
+					Important for svn_ci command if an update is to be done after commit. 
+";
+}
+
+#echo "Entering...$0";
+[ $(basename "$0") != $(ls -l /bin/sh | sed -e 's/.*> //') ] && echo "[WARNING]: You must source this script!!";
