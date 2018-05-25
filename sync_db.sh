@@ -11,7 +11,7 @@ function which_dropbox()
 }
 
 #uncoment for debug
-#exec 15> $HOME/tools/log.txt
+#exec 15> "$(dirname $0)/log.txt"
 #BASH_XTRACEFD=15
 #set -x
 
