@@ -1,0 +1,504 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate compile_commands.json",
+            "type": "process",
+            "command": "python",
+            "args": [
+                "${workspaceRoot}/.vscode/generate_compdb.py"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Build ARM",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "uImage UIMAGE_LOADADDR=0x8000"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Clean ARM",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "clean"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Distclean ARM",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "mrproper"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Config ARM",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "menuconfig"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Sparse ARM",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "C=2",
+                "${file}"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Devicetree ARM",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "-d",
+                "${file}"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "ALL Devicetrees ARM",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "dtbs"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Build ARM64",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "options": {
+                "env": {
+                    "arch": "arm64",
+                    "cross_compile": "aarch64-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Clean ARM64",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "clean"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm64",
+                    "cross_compile": "aarch64-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Distclean ARM64",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "mrproper"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm64",
+                    "cross_compile": "aarch64-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Config ARM64",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "menuconfig"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm64",
+                    "cross_compile": "aarch64-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Sparse ARM64",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "C=2",
+                "${file}"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm64",
+                    "cross_compile": "aarch64-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Devicetree ARM64",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "-d",
+                "${file}"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm64",
+                    "cross_compile": "aarch64-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "ALL Devicetrees ARM64",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "dtbs"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm64",
+                    "cross_compile": "aarch64-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Build Microblaze",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "simpleImage.vcu118_ad9081_jesd204c_m8_l4_LR_12G"
+            ],
+            "options": {
+                "env": {
+                    "arch": "microblaze",
+                    "cross_compile": "microblazeel-xilinx-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Clean Microblaze",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "clean"
+            ],
+            "options": {
+                "env": {
+                    "arch": "microblaze",
+                    "cross_compile": "microblazeel-xilinx-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Distclean Microblaze",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "mrproper"
+            ],
+            "options": {
+                "env": {
+                    "arch": "microblaze",
+                    "cross_compile": "microblazeel-xilinx-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Config Microblaze",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "menuconfig"
+            ],
+            "options": {
+                "env": {
+                    "arch": "microblaze",
+                    "cross_compile": "microblazeel-xilinx-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Sparse Microblaze",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "C=2",
+                "${file}"
+            ],
+            "options": {
+                "env": {
+                    "arch": "microblaze",
+                    "cross_compile": "microblazeel-xilinx-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Defconfig Zynq",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "zynq_xcomm_adv7511_defconfig"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Defconfig RPI3",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "adi_bcm2709_defconfig"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Defconfig RPI4",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "adi_bcm2711_defconfig"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm",
+                    "cross_compile": "arm-linux-gnueabihf-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Defconfig ZynqMP",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "adi_zynqmp_defconfig"
+            ],
+            "options": {
+                "env": {
+                    "arch": "arm64",
+                    "cross_compile": "aarch64-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Defconfig Microblaze",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh",
+            "args": [
+                "adi_mb_defconfig"
+            ],
+            "options": {
+                "env": {
+                    "arch": "microblaze",
+                    "cross_compile": "microblazeel-xilinx-linux-gnu-"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        }
+    ]
+}
