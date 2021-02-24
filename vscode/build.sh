@@ -43,4 +43,4 @@ case "${1}" in
 esac
 
 [[ -f ${vivado} ]] && source ${vivado}
-make ARCH=${arch} CROSS_COMPILE=${cross_compile} ${opt} ${file} -j18
+make ARCH=${arch} CROSS_COMPILE=${cross_compile} ${opt} ${file} -j$(nproc)
