@@ -11,14 +11,6 @@ version=$(cat Makefile | grep -e "VERSION *= *[0-9]" | cut -d "=" -f2 | tr -d " 
 patchevel=$(cat Makefile | grep -e "PATCHLEVEL *= *[0-9]" | cut -d "=" -f2 | tr -d " ")
 full_ver="${version}.${patchevel}"
 
-# get vivado toolchains from the kernel version
-if [[ ${full_ver} == "4.19" ]]; then
-	vivado="$HOME/work/Vivado_2019_R1/Vivado/2019.1/settings64.sh"
-else
-	# default to the latest which is 5.4 kernel
-	vivado="$HOME/work/Vivado_2020_R1/Vivado/2020.1/settings64.sh"
-fi
-
 case "${1}" in
 "C=2")
 	# used for sparse
@@ -42,5 +34,17 @@ case "${1}" in
 	;;
 esac
 
-[[ -f ${vivado} ]] && source ${vivado}
+# this env should be set in task.json if we don't want to look for a vivado instalation
+[[ ${no_vivado} != "y" ]] && {
+	# get vivado toolchains from the kernel version
+	if [[ ${full_ver} == "4.19" ]]; then
+		vivado="$HOME/work/Vivado_2019_R1/Vivado/2019.1/settings64.sh"
+	else
+		# default to the latest which is 5.4 kernel
+		vivado="$HOME/work/Vivado_2020_R1/Vivado/2020.1/settings64.sh"
+	fi
+
+	[[ -f ${vivado} ]] && source ${vivado}
+}
+
 make ARCH=${arch} CROSS_COMPILE=${cross_compile} ${opt} ${file} -j$(nproc)
