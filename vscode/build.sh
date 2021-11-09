@@ -27,7 +27,7 @@ case "${1}" in
 	fi
 
 	# check for overlays...
-	[[ ${file} =~ .*-overlay.dtb ]] && file="overlays/"$(cut -d"-" -f1 <<<${file})".dtbo"
+	[[ ${file} =~ .*-overlay.dtb ]] && file="overlays/"$(sed 's/-overlay.dtb//' <<<${file})".dtbo"
 	;;
 *)
 	opt="${1}"
