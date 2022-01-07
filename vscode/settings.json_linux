@@ -1,0 +1,31 @@
+{
+    "files.exclude": {
+        "**/.*.*.cmd": true,
+	"**/*.config": true,
+	"**/*.config.old": true,
+	"**/*.dtb": true,
+	"**/*.dtc.tmp": true,
+	"**/*.dts.tmp": true,
+	"**/*.pre.tmp": true
+    },
+    "checkpatch.checkpatchPath": "/home/nsa/work/linux/scripts/checkpatch.pl",
+    "checkpatch.checkpatchArgs": [
+        "--strict",
+	"--max-line-length=100"
+    ],
+    "checkpatch.run": "onSave",
+    "[c]": {
+        "editor.detectIndentation": false,
+        "editor.tabSize": 8,
+        "editor.insertSpaces": false
+    },
+    "cSpell.words": [
+        "devm",
+        "kzalloc"
+    ],
+    "files.associations": {
+        "*.h": "c"
+    },
+    "editor.insertSpaces": false,
+    "editor.detectIndentation": false,
+}
