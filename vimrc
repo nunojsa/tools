@@ -59,12 +59,7 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-" set mouse=n
-execute pathogen#infect()
-syntax on
-filetype plugin indent on
 
-" set runtimepath-=~/.vim/bundle/YouCompleteMe
 
 " Automatically save the current session whenever vim is closed
 " autocmd VimLeave * mksession! ~/.vim/shutdown_session.vim
@@ -134,9 +129,9 @@ nnoremap <silent> <F2> :TlistToggle<CR>
 nmap <C-g> :tab split<CR>:Ack --type cc --type cpp <cword><CR>
 " wintabs
 "for buffers
-  map <C-Left> <Plug>(wintabs_previous)
-  map <C-Right> <Plug>(wintabs_next)
-  map <C-k> <Plug>(wintabs_close)
+map <C-Left> <Plug>(wintabs_previous)
+map <C-Right> <Plug>(wintabs_next)
+map <C-k> <Plug>(wintabs_close)
 noremap <F9> :WintabsAllBuffers<CR>
 
 " to open the search view - Ctrlp
