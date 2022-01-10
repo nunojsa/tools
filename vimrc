@@ -26,6 +26,8 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'xolox/vim-misc'
 " Session manager
 Plugin 'xolox/vim-session'
+" provides code outline (with f2 shortcut)
+Plugin 'yegappan/taglist'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.$
 " plugin on GitHub repo
