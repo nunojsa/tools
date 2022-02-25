@@ -28,6 +28,9 @@ Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
 " provides code outline (with f2 shortcut)
 Plugin 'yegappan/taglist'
+" provides neater statusline
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.$
 " plugin on GitHub repo
@@ -147,4 +150,7 @@ let g:session_autosave = 'yes'
 set number
 set numberwidth=2
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
+
+" Airline theme
+let g:airline_theme='dark_minimal'
 
