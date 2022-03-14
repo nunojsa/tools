@@ -154,6 +154,18 @@ highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE gui
 " Airline theme
 let g:airline_theme='dark_minimal'
 
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" air-line
+let g:airline_powerline_fonts = 1
+
+" airline symbols
+let g:airline_symbols.linenr = ' ☰ '
+let g:airline_symbols.colnr = ' :'
+let g:airline_symbols.maxlinenr = ' ln '
+
 " GutenTags
 let g:gutentags_generate_on_missing = 0
 let g:gutentags_generate_on_new = 0
