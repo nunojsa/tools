@@ -31,6 +31,8 @@ Plugin 'yegappan/taglist'
 " provides neater statusline
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+
+
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.$
 " plugin on GitHub repo
@@ -73,6 +75,7 @@ map <C-l> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 set encoding=utf-8
+syntax on
 
 "for tabs
 map <S-Right> :tabnext<CR>
