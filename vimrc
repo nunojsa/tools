@@ -171,3 +171,5 @@ let g:gutentags_generate_on_missing = 0
 let g:gutentags_generate_on_new = 0
 let g:gutentags_generate_on_write = 0
 
+" get rid of some strange escape sequence whem airline is present
+set t_RV=
