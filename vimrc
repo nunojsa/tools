@@ -77,6 +77,8 @@ map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 set encoding=utf-8
 syntax on
 
+nnoremap <C-A-v> <c-v>
+
 "for tabs
 map <S-Right> :tabnext<CR>
 map <S-Left> :tabprev<CR>
