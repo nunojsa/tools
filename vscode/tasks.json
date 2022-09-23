@@ -19,7 +19,7 @@
         {
             "label": "Build ARM",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "uImage UIMAGE_LOADADDR=0x8000"
             ],
@@ -42,7 +42,7 @@
         {
             "label": "Clean ARM",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "clean"
             ],
@@ -62,7 +62,7 @@
         {
             "label": "Distclean ARM",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "mrproper"
             ],
@@ -82,7 +82,7 @@
         {
             "label": "Config ARM",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "menuconfig"
             ],
@@ -102,7 +102,7 @@
         {
             "label": "Sparse ARM",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "C=2",
                 "${file}"
@@ -123,7 +123,7 @@
         {
             "label": "Devicetree ARM",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "-d",
                 "${file}"
@@ -144,7 +144,7 @@
         {
             "label": "ALL Devicetrees ARM",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "dtbs"
             ],
@@ -164,7 +164,7 @@
         {
             "label": "Build ARM64",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "options": {
                 "env": {
                     "arch": "arm64",
@@ -181,7 +181,7 @@
         {
             "label": "Clean ARM64",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "clean"
             ],
@@ -201,7 +201,7 @@
         {
             "label": "Distclean ARM64",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "mrproper"
             ],
@@ -221,7 +221,7 @@
         {
             "label": "Config ARM64",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "menuconfig"
             ],
@@ -241,7 +241,7 @@
         {
             "label": "Sparse ARM64",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "C=2",
                 "${file}"
@@ -262,7 +262,7 @@
         {
             "label": "Devicetree ARM64",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "-d",
                 "${file}"
@@ -283,7 +283,7 @@
         {
             "label": "ALL Devicetrees ARM64",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "dtbs"
             ],
@@ -303,7 +303,7 @@
         {
             "label": "Build Microblaze",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "simpleImage.vcu118_ad9081_jesd204c_m8_l4_LR_12G"
             ],
@@ -322,7 +322,7 @@
         {
             "label": "Clean Microblaze",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "clean"
             ],
@@ -342,7 +342,7 @@
         {
             "label": "Distclean Microblaze",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "mrproper"
             ],
@@ -362,7 +362,7 @@
         {
             "label": "Config Microblaze",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "menuconfig"
             ],
@@ -382,7 +382,7 @@
         {
             "label": "Sparse Microblaze",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "C=2",
                 "${file}"
@@ -403,7 +403,7 @@
         {
             "label": "Defconfig Zynq",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "zynq_xcomm_adv7511_defconfig"
             ],
@@ -423,7 +423,7 @@
         {
             "label": "Defconfig RPI3",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "adi_bcm2709_defconfig"
             ],
@@ -443,7 +443,7 @@
         {
             "label": "Defconfig RPI4",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "adi_bcm2711_defconfig"
             ],
@@ -463,7 +463,7 @@
         {
             "label": "Defconfig ZynqMP",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "adi_zynqmp_defconfig"
             ],
@@ -483,7 +483,7 @@
         {
             "label": "Defconfig Microblaze",
             "type": "shell",
-            "command": "${workspaceRoot}/build.sh",
+            "command": "$HOME/.tools/vscode/build.sh",
             "args": [
                 "adi_mb_defconfig"
             ],
