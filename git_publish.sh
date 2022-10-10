@@ -101,7 +101,8 @@ git publish ${out_to[@]} ${out_cc[@]} "$@"
 # everything worked... let's save the base branch so that we do not need to specify it in
 # the next git-publish run
 base=$(sed -n 's/.*\(--base=\|-b \)\(.*\)/\2/p' <<<"$@" | cut -d " " -f1)
-[[ -z ${base} ]] && {
+already_set=$(git config branch.$(git rev-parse --abbrev-ref HEAD).gitpublishbase)
+[[ -z ${base} && -z ${already_set} ]] && {
 	echo "WARNING: Could not get base branch. Not saving it..."
 	exit 0
 }
