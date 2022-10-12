@@ -5,8 +5,8 @@
 # Simple script to wrap git-publish:
 #	https://github.com/stefanha/git-publish
 # Most of the work is just about preparing the to and cc list so
-# that is nicely displayed but git-publish. Most of the times, it
-# should only need to be rrun in the first version of the patchset.
+# that is nicely displayed by git-publish. Most of the times, it
+# should only need to be run in the first version of the patchset.
 # The script is highly inspired in:
 #	https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh
 
