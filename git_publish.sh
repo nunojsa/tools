@@ -63,7 +63,6 @@ while [ $# -ge 1 ]; do
 		;;
 	-l|--lkml)
 		lkml="y"
-		shift
 		;;
 	-h|--help)
 		usage
