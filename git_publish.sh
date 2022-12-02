@@ -21,6 +21,7 @@ options for both get_maintainer.pl and git-publish.
 Options:
   -c, --count		Should be the number of patches that will be included in the series.
   -l, --lkml		Include the Linux Kernel Mailing List.
+  -n, --no-linux	Does not run get_maintainer.pl. Naturally, implies --to (at least) must be given.
   -h, --help		Display this help and exit.
 	\n"
 
@@ -54,6 +55,9 @@ count="1"
 lkml="n"
 options=""
 first=""
+out_to=()
+out_cc=()
+no_linux="n"
 
 while [ $# -ge 1 ]; do
 	case $1 in
@@ -63,6 +67,9 @@ while [ $# -ge 1 ]; do
 		;;
 	-l|--lkml)
 		lkml="y"
+		;;
+	-n|--no-linux)
+		no_linux="y"
 		;;
 	-h|--help)
 		usage
@@ -82,18 +89,20 @@ while [ $# -ge 1 ]; do
 	shift
 done
 
-OPTS="--no-roles --no-rolestats --remove-duplicates --git --git-min-percent=67 $options"
-to=$(git show -$count | scripts/get_maintainer.pl $OPTS --no-m --no-r)
-cc=$(git show -$count | scripts/get_maintainer.pl $OPTS --no-l)
+if [[ ${no_linux} == "n" ]]; then
+	OPTS="--no-roles --no-rolestats --remove-duplicates --git --git-min-percent=67 $options"
+	to=$(git show -$count | scripts/get_maintainer.pl $OPTS --no-m --no-r)
+	cc=$(git show -$count | scripts/get_maintainer.pl $OPTS --no-l)
 	
-[[ ${lkml} == "y" ]] || to=${to/linux-kernel@vger.kernel.org/}
+	[[ ${lkml} == "y" ]] || to=${to/linux-kernel@vger.kernel.org/}
 
-# Going with all this trouble to prepare the cc and to list to use multiple '--cc=' and
-# '--to=' switches because it works better with git-publish in the sense that each email
-# is displayed in it's own line making it easier to double check.
-IFS=$'\n'
-remove_duplicates "${cc}" "${to}" out_to
-out_cc=($(sed "s/\(.*\)/--cc=\1/g" <<<"${cc}"))
+	# Going with all this trouble to prepare the cc and to list to use multiple '--cc=' and
+	# '--to=' switches because it works better with git-publish in the sense that each email
+	# is displayed in it's own line making it easier to double check.
+	IFS=$'\n'
+	remove_duplicates "${cc}" "${to}" out_to
+	out_cc=($(sed "s/\(.*\)/--cc=\1/g" <<<"${cc}"))
+fi
 
 git publish ${out_to[@]} ${out_cc[@]} "$@"
 
