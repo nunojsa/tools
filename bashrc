@@ -43,17 +43,15 @@ unset RED
 unset KIND_OF_BLUE
 unset RESET
 
-if [ -x "$(command -v tmux)" ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
-	if ! systemctl --user is-active --quiet tmux.service; then
-		systemctl --user start tmux.service
-	fi
-
-	if ! tmux ls | grep $USER | grep -q attached; then
-		tmux attach-session -t "${USER}" >/dev/null 2>&1
-	fi
-fi
-
 # bash history. Set to the number of commands to remember in history
 HISTSIZE=20000
 
 export PATH=$PATH:$HOME/.tools/:$HOME/.tools/git-series-push/
+
+if [ -x "$(command -v tmux)" ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
+	if ! systemctl --user is-active --quiet tmux.service; then
+		if ! tmux ls | grep $USER | grep -q attached; then
+			tmux attach-session -t "${USER}" >/dev/null 2>&1
+		fi
+	fi
+fi
