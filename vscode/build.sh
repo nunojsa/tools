@@ -4,6 +4,7 @@
 # from tasks.json with the proper parameters. As I use this to mainly compile ADI
 # kernel, I try to find a proper Vivado installation to get the toolchain. However,
 # one can use any toolchain he wants as long as the proper env variables are passed.
+set -e
 
 opt=""
 vivado=""
@@ -34,17 +35,14 @@ case "${1}" in
 	;;
 esac
 
-# this env should be set in task.json if we don't want to look for a vivado instalation
+# this env should be set in task.json if we don't want to look for a vivado installation
 [[ ${no_vivado} != "y" ]] && {
-	# get vivado toolchains from the kernel version
-	if [[ ${full_ver} == "4.19" ]]; then
-		vivado="$HOME/work/Vivado_2019_R1/Vivado/2019.1/settings64.sh"
-	else
-		# default to the latest which is 5.4 kernel
-		vivado="$HOME/work/Vivado_2020_R1/Vivado/2020.1/settings64.sh"
-	fi
+	vivado=$(ls -d $HOME/work/Vivado_* | sort | tail -1)
 
-	[[ -f ${vivado} ]] && source ${vivado}
+	# I'm aware this will break if Xilinx changes the directory tree but using 'find'
+	# was taking some __annoying__ time so I prefer fix this (if I ever have to) when
+	# the time comes...
+	[[ -d ${vivado} ]] && source ${vivado}/Vivado/*/settings64.sh
 }
 
 make ARCH=${arch} CROSS_COMPILE=${cross_compile} ${opt} ${file} -j$(nproc)
