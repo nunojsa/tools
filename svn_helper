@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# SPDX-License-Identifier:	GPL-2.0
+
 #AUTHOR: Nuno Sá
 #Brief:	 This script is intended to be used as an helper to svn and automatize some operations that i use more
 #as selecting all the files to commit instead of selecting one by one (based on a list with files to ignore). All the operations

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# SPDX-License-Identifier:	GPL-2.0
+
 # this script is intended to build the linux kernel under vscode. It can be called
 # from tasks.json with the proper parameters. As I use this to mainly compile ADI
 # kernel, I try to find a proper Vivado installation to get the toolchain. However,

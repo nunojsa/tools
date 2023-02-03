@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# SPDX-License-Identifier:	GPL-2.0
+
 #Simple script which starts dropbox, waits for a specific file to sync
 #and stops dropbox. It can be handy or things like setting triggers in
 #keepass for assuring syn on the database...
