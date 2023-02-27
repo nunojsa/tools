@@ -12,7 +12,7 @@ command -v expac >/dev/null 2>&1 && alias expac='expac --timefmt "%Y-%m-%d %T" "
 # based on aosp. Sometimes useful but often not need when working on a git tree
 cgrep() {
 	find . -name .git -prune -o -type f \( -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.cc' \
-		-o -name '*.hpp' \) -print0 | xargs -0 grep --col   our -n "$@"
+		-o -name '*.hpp' \) -print0 | xargs -0 grep --col -n "$@"
 }
 
 mgrep() {
