@@ -19,10 +19,11 @@ like '--option1 --option2'. This means that the git-publish separator '--' is ma
 options for both get_maintainer.pl and git-publish.
 
 Options:
-  -c, --count		Should be the number of patches that will be included in the series.
-  -l, --lkml		Include the Linux Kernel Mailing List.
-  -n, --no-linux	Does not run get_maintainer.pl. Naturally, implies --to (at least) must be given.
-  -h, --help		Display this help and exit.
+  -c, --count			Should be the number of patches that will be included in the series.
+  -l, --lkml			Include the Linux Kernel Mailing List.
+  -n, --no-linux		Does not run get_maintainer.pl. Naturally, implies --to (at least) must be given.
+  -e, --end-series [branch]	End a patchseries. This means deleting all version tags and the topic branch.
+  -h, --help			Display this help and exit.
 	\n"
 
 	exit 2
@@ -51,6 +52,18 @@ remove_duplicates() {
 	done
 }
 
+end_series() {
+	local branch=${1:-$(git rev-parse --abbrev-ref HEAD)}
+	local tags=$(git --no-pager tag -l | grep -Eo "$branch-v[1-9][0-9]?")
+
+	for t in ${tags}; do
+		git tag --delete ${t}
+		git branch -D ${branch}
+	done
+
+	exit 0
+}
+
 count="1"
 lkml="n"
 options=""
@@ -70,6 +83,11 @@ while [ $# -ge 1 ]; do
 		;;
 	-n|--no-linux)
 		no_linux="y"
+		;;
+	-e|--end-series)
+		shift
+		end_series "$@"
+		# this wil exit the script
 		;;
 	-h|--help)
 		usage
