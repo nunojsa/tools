@@ -132,5 +132,7 @@ already_set=$(git config branch.$(git rev-parse --abbrev-ref HEAD).gitpublishbas
 	echo "WARNING: Could not get base branch. Not saving it..."
 	exit 0
 }
+
+[[ -n ${already_set} && -z ${base} ]] && exit 0
 git config branch.$(git rev-parse --abbrev-ref HEAD).gitpublishbase ${base}
 
