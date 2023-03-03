@@ -28,6 +28,21 @@ bbgrep() {
 		-o -name '*.conf' \) -print0 | xargs    -0 grep --colour -n "$@"
 }
 
+os_name() {
+	cat /etc/os-release  | grep -E -o ^ID=.* | cut -d"=" -f2
+}
+
+TURQUOISE="\[$(tput setaf 6)\]"
+KIND_OF_BLUE="\[$(tput setaf 12)\]"
+RED="\[$(tput setaf 1)\]"
+RESET="\[$(tput sgr0)\]"
+
+PS1="${KIND_OF_BLUE}($(os_name)) ${TURQUOISE}\u@\W${RED}\$${RESET} "
+unset TURQUOISE
+unset RED
+unset KIND_OF_BLUE
+unset RESET
+
 if [ -x "$(command -v tmux)" ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
 	if ! systemctl --user is-active --quiet tmux.service; then
 		systemctl --user start tmux.service
