@@ -1,0 +1,64 @@
+=encoding utf8
+
+=head1 NAME
+
+git-series-push - Push patch series to mailing lists
+
+=head1 SYNOPSIS 
+
+B<git-series-push  [options] --* [get_maintainer.pl options] -- [git-publish options]>
+
+=head1 DESCRIPTION
+
+Simple script to wrap git-publish (https://github.com/stefanha/git-publish). The primary
+goal is to send patch series to the linux kernel mailing lists in a easier and efficient
+way. The script will automatically run get_maintainer.pl to infer to which mailing lists
+and maintainers/reviewers the series has to be sent. After that, enter git-publish that
+will save state between versions so that we don't have to keep rewriting covers and version
+numbers are automatically set in place.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-h, --help>
+
+Display this help and exit.
+
+=item B<-c, --count>
+
+Should be the number of patches that will be included in the series. Defaults to 1.
+
+=item B<-l, --lkml>
+
+Include the Linux Kernel Mailing List. Since this is a very high traffic list, by default it is
+not included for sending the patches as most of the times they are not really meant for lkml.
+
+=item B<-n, --no-linux>
+
+Does not run get_maintainer.pl. Naturally, implies --to (see L<git-publish(1)>) must be given.
+
+=item B<-e, --end-series [branch]>
+
+End a patchseries. This means deleting all version tags and the topic branch. If branch is not given, defaults
+to where current head is pointing to.
+
+=back
+
+=head1 AUTHOR
+
+Nuno Sa.
+
+=head1 REPORTING BUGS
+
+Report any bug to https://github.com/nunojsa/tools
+
+=head1 COPYRIGHT
+
+Copyright (C) 2022 Nuno Sa. License GPLv2: GNU General Public License v2.0.
+
+=head1 SEE ALSO
+
+L<git-publish(1)>, L<git-send-email(1)>
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/get_maintainer.pl
