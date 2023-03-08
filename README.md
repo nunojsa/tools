@@ -9,7 +9,7 @@ This repo contains a set of miscalaneous tools/scripts and configuration files u
 |svn_helper| legacy script for when I used svn :facepalm:|
 |sync_db.sh| legacy script for syncronizing my keepass file in dropbox|
 |vimrc| vim config file|
-|git_publish.sh|helper script for sending linux patches|
+|git-series-push|helper script for sending linux patches|
 |build.sh|Vscode script to build linux. Very specific for my job workflow|
 |settings.json_linux|Vscode Linux settings template|
 |tasks.json|Vscode custom tasks template|

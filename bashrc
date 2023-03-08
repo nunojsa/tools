@@ -56,4 +56,4 @@ fi
 # bash history. Set to the number of commands to remember in history
 HISTSIZE=20000
 
-export PATH=$PATH:$HOME/.tools/
+export PATH=$PATH:$HOME/.tools/:$HOME/.tools/git-series-push/
