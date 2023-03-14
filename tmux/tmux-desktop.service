@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# tmux systemd service. This is called tmux-desktop as the main
+# usage for it is to use it on local machines with a desktop environment
+# installed. Hence, we just start the new session after the graphical
+# environment is fully initialized so that we inherit almost all the
+# env variables so that we have the same ones as with a typical terminal
+# emulator as terminator.
+#
+# !\TODO: Check if the graphical-session.target is generic across DEs
+# (at least on xfce) so that this unit can be used on all my machines.
+
+[Unit]
+Description=Start tmux in detached session
+Requires=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/tmux new-session -s %u -d
+
+[Install]
+WantedBy=graphical-session.target
