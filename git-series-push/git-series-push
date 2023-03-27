@@ -23,6 +23,7 @@ Options:
   -l, --lkml			Include the Linux Kernel Mailing List.
   -n, --no-linux		Does not run get_maintainer.pl. Naturally, implies --to (at least) must be given.
   -e, --end-series [branch]	End a patchseries. This means deleting all version tags and the topic branch.
+  -s, --show-series		Shows possible ongoing (or ended) series.
   -h, --help			Display this help and exit.
 	\n"
 
@@ -88,6 +89,10 @@ while [ $# -ge 1 ]; do
 		shift
 		end_series "$@"
 		# this wil exit the script
+		;;
+	-s|--show-series)
+		git --no-pager tag -l | grep -Eo '.*-v[1-9]+[0-9]?$'
+		exit 0
 		;;
 	-h|--help)
 		usage

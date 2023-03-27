@@ -43,6 +43,10 @@ Does not run get_maintainer.pl. Naturally, implies --to (see L<git-publish(1)>) 
 End a patchseries. This means deleting all version tags and the topic branch. If branch is not given, defaults
 to where current head is pointing to.
 
+=item B<-s, --show-series>
+
+Shows possible ongoing (or ended) series.
+
 =back
 
 =head1 AUTHOR
