@@ -59,8 +59,9 @@ end_series() {
 
 	for t in ${tags}; do
 		git tag --delete ${t}
-		git branch -D ${branch}
 	done
+
+	git branch -D ${branch}
 
 	exit 0
 }
