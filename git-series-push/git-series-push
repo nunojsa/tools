@@ -61,7 +61,8 @@ end_series() {
 		git tag --delete ${t}
 	done
 
-	git branch -D ${branch}
+	# if the branch name was given as a parameter, it might not exist anymore...
+	git show-ref --verify --quiet refs/heads/${branch} && git branch -D ${branch}
 
 	exit 0
 }
