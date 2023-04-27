@@ -67,6 +67,7 @@ end_series() {
 	exit 0
 }
 
+v1=$(git tag -l | grep -Eo "$(git rev-parse --abbrev-ref HEAD)-v[1-9]+[0-9]?$" || echo "y")
 count="1"
 lkml="n"
 first=""
@@ -110,7 +111,7 @@ while [ $# -ge 1 ]; do
 	shift
 done
 
-if [[ ${no_linux} == "n" ]]; then
+if [[ ${no_linux} == "n" && ${v1} == "y" ]]; then
 	OPTS="--no-roles --no-rolestats --remove-duplicates --git --git-min-percent=67"
 	to=$(git show -$count | scripts/get_maintainer.pl $OPTS --no-m --no-r)
 	cc=$(git show -$count | scripts/get_maintainer.pl $OPTS --no-l)
