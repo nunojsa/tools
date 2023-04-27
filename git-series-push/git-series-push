@@ -13,10 +13,10 @@
 set -o pipefail
 
 usage() {
-	printf "Usage $0 [options] --* [get_maintainer.pl options] -- [git-publish options]
-Script to send linux patchseries via git-publish. Note that each get_maintainer.pl option is given
-like '--option1 --option2'. This means that the git-publish separator '--' is mandatory for having
-options for both get_maintainer.pl and git-publish.
+	printf "Usage $0 [options] -- [git-publish options]
+Script to send patchseries via git-publish. While mainly aimed to be used
+for linux development, it can be used to send patches to any project based
+on mailing lists.
 
 Options:
   -c, --count			Should be the number of patches that will be included in the series.
@@ -69,7 +69,6 @@ end_series() {
 
 count="1"
 lkml="n"
-options=""
 first=""
 out_to=()
 out_cc=()
@@ -103,9 +102,6 @@ while [ $# -ge 1 ]; do
 		shift
 		break;
 		;;
-	--*)
-		options="$options $1"
-		;;
 	*)
 		break
 		;;
@@ -115,7 +111,7 @@ while [ $# -ge 1 ]; do
 done
 
 if [[ ${no_linux} == "n" ]]; then
-	OPTS="--no-roles --no-rolestats --remove-duplicates --git --git-min-percent=67 $options"
+	OPTS="--no-roles --no-rolestats --remove-duplicates --git --git-min-percent=67"
 	to=$(git show -$count | scripts/get_maintainer.pl $OPTS --no-m --no-r)
 	cc=$(git show -$count | scripts/get_maintainer.pl $OPTS --no-l)
 	
