@@ -23,14 +23,13 @@ case "${1}" in
 	;;
 "-d")
 	file=${2/.dts/.dtb}
-	if [[ ${arch} == "arm64" ]]; then
+	if [[ ${file} =~ .*-overlay.dtb ]]; then
+		file="overlays/"$(sed 's/-overlay.dtb//' <<<$(basename ${file}))".dtbo"
+	elif [[ ${full_ver} > "6.4" || ${arch} == "arm64" ]]; then
 		file=$(sed 's;.*boot/dts/;;' <<<${file})
 	else
 		file=$(basename ${file})
 	fi
-
-	# check for overlays...
-	[[ ${file} =~ .*-overlay.dtb ]] && file="overlays/"$(sed 's/-overlay.dtb//' <<<${file})".dtbo"
 	;;
 *)
 	opt="${1}"
