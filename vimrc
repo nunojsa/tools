@@ -31,7 +31,8 @@ Plugin 'yegappan/taglist'
 " provides neater statusline
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-
+Plugin 'godlygeek/tabular'
+Plugin 'preservim/vim-markdown'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.$
@@ -172,6 +173,9 @@ let g:airline_symbols.maxlinenr = ' ln '
 let g:gutentags_generate_on_missing = 0
 let g:gutentags_generate_on_new = 0
 let g:gutentags_generate_on_write = 0
+
+set conceallevel=2
+let g:vim_markdown_borderless_table = 0
 
 " get rid of some strange escape sequence whem airline is present
 set t_RV=
