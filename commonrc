@@ -30,3 +30,14 @@ bbgrep() {
 	find . -name .git -prune -o -type f \( -name '*.bb' -o -name '*.bbclass' -o -name '*.bbappend' -o -name '*.inc' \
 		-o -name '*.conf' \) -print0 | xargs    -0 grep --colour -n "$@"
 }
+
+if [ -x "$(command -v tmux)" ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
+	if ! systemctl --user is-active --quiet tmux-desktop.service; then
+		systemctl --user start tmux-desktop.service
+	fi
+
+	if ! tmux ls | grep $USER | grep -q attached; then
+		tmux attach-session -t "${USER}" >/dev/null 2>&1
+	fi
+fi
+
