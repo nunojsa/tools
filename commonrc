@@ -11,6 +11,8 @@ alias cross_cc_arm64='export ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-'
 
 # this one is used in system like arch to check latest packages installed
 command -v expac >/dev/null 2>&1 && alias expac='expac --timefmt "%Y-%m-%d %T" "%l\t%n" | sort'
+# to handle git credentials
+command -v ksshaskpass > /dev/null && export SSH_ASKPASS=/usr/bin/ksshaskpass
 
 # based on aosp. Sometimes useful but often not need when working on a git tree
 cgrep() {
