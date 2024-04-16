@@ -1,0 +1,41 @@
+# auto complete
+source  $HOME/.tools/zsh/zsh-complete.zsh
+source  $HOME/.tools/zsh/zsh-history.zsh
+
+# cd options - enables directory stack and changing dirs without typing cd
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt pushdminus
+setopt pushdsilent
+setopt cdsilent
+
+# other useful plugins
+() {
+	local syntax=""
+	local auto=""
+
+	if [[ -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+		syntax="/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+	elif [[ -f "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+		syntax="/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+	fi
+
+	[[ -f ${syntax} ]] && source ${syntax}
+
+	if [[ -f "/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+		auto="/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+	elif [[ -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+		auto="/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+	fi
+
+	[[ -f ${auto} ]] && source ${auto}
+}
+source $HOME/.tools/zsh/plugins/sudo.plugin.zsh
+
+# theme
+source $HOME/.tools/zsh/themes/darkblood.zsh
+
+source $HOME/.tools/zsh/utils.zsh
+source $HOME/.tools/commonrc
+
