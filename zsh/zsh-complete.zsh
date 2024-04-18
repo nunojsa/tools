@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0
+
 # On fedora, docker completions can be found in here. Needs to
 # be before compinit.
 #

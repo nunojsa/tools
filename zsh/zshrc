@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0
+
 # auto complete
 source  $HOME/.tools/zsh/zsh-complete.zsh
 source  $HOME/.tools/zsh/zsh-history.zsh

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0
+
 __last_cmd=""
 __local_hist_handle() {
 	__cmd=${1%%$'\n'}
