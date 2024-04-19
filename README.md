@@ -5,14 +5,16 @@ This repo contains a set of miscalaneous tools/scripts and configuration files u
 | Tool/Config  | Description  |
 |--------------|--------------|
 |bashrc| bash specific helper |
+|zsh/| zsh related configurations|
+|commonrc| common configuration between bash and zsh|
 |screenrc| screen config file |
 |svn_helper| legacy script for when I used svn :facepalm:|
 |sync_db.sh| legacy script for syncronizing my keepass file in dropbox|
 |vimrc| vim config file|
-|git-series-push|helper script for sending linux patches|
-|build.sh|Vscode script to build linux. Very specific for my job workflow|
-|settings.json_linux|Vscode Linux settings template|
-|tasks.json|Vscode custom tasks template|
+|remote-connect| freerdp based script to connect to a remote machine|
+|git-series-push/| git-publish based tool for sending patcheseries|
+|vscode/| vscode related bits|
+|tmux/| tmux related configurations|
 
 # Contributions
 
