@@ -2,7 +2,7 @@
 
 # SPDX-License-Identifier: GPL-2.0
 
-CFG_FILE=${1:-$HOME/.local/remote-connect.txt}
+CFG_FILE=${1:-$HOME/.local/share/remote-connect.txt}
 
 get_parameter() {
 	cat ${CFG_FILE} | grep "${1}=" | sed "s/${1}=//"
