@@ -25,6 +25,7 @@ MAC_ADDR=$(get_parameter mac)
 NET_ADDR=$(get_parameter net)
 IP_ADDR=$(get_parameter ip)
 PASSWORD=$(get_parameter password)
+USER=$(get_parameter user)
 
 # get encryption key (using zenity for getting a prompt)
 descrypt_pass="$(zenity --password --title="Decryption password")"
@@ -38,7 +39,7 @@ PASSWORD=$(openssl enc -aes-256-cbc -md sha512 -a -d -pbkdf2 -salt -pass pass:${
 	ARP_MAC=$(arp -n | grep ${IP_ADDR} | grep -E -o '([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}')
 	[[ ${ARP_MAC,,} == ${MAC_ADDR,,} ]] && {
 		# we're done
-		exec ${freerdp} /u:nsa /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper
+		exec ${freerdp} /u:"${USER}" /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper
 	} || {
 		cat ${CFG_FILE} | sed -i -e 's/ip.*//'  -e '/^[[:space:]]*$/d' ${CFG_FILE}
 	}
@@ -53,5 +54,5 @@ command -v nmap > /dev/null || {
 IP_ADDR=$(pkexec nmap -sn ${NET_ADDR} | grep -C2 -i ${MAC_ADDR} | head -1 | grep -Eo '([[:digit:]]{1,3}.){3}[[:digit:]]{1,3}')
 [[ -n ${IP_ADDR} ]] && echo "ip=${IP_ADDR}" >> ${CFG_FILE}
 
-exec ${freerdp} /u:nsa /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper
+exec ${freerdp} /u:"${USER}" /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper
 
