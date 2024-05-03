@@ -9,6 +9,7 @@ alias scp_no_hosts='scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/n
 alias cross_cc_arm='export ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
 alias cross_cc_arm64='export ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-'
 
+command -v expac >/dev/null 2>&1 && alias update-mirrors='rate-mirrors arch | sudo tee /etc/pacman.d/mirrorlist'
 # this one is used in system like arch to check latest packages installed
 command -v expac >/dev/null 2>&1 && alias expac='expac --timefmt "%Y-%m-%d %T" "%l\t%n" | sort'
 # to handle git credentials
