@@ -60,7 +60,11 @@ command -v nmap > /dev/null || {
 
 # Slowpath, let's run snmap...
 IP_ADDR=$(pkexec nmap -sn ${NET_ADDR} | grep -C2 -i ${MAC_ADDR} | head -1 | grep -Eo '([[:digit:]]{1,3}.){3}[[:digit:]]{1,3}')
-[[ -n ${IP_ADDR} ]] && echo "ip=${IP_ADDR}" >> ${CFG_FILE}
-
+# let's see if we can at least ping the new IP
+ping ${IP_ADDR} -c 1 > /dev/null && {
+	echo "ip=${IP_ADDR}" >> ${CFG_FILE}
+} || {
+	zenity --error --text "Cannot reach IP=${IP_ADDR}" --title "Remote Connect"
+}
 do_connect
 
