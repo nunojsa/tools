@@ -3,9 +3,14 @@
 # SPDX-License-Identifier: GPL-2.0
 
 CFG_FILE=${1:-$HOME/.local/share/remote-connect.txt}
+LOG_FILE=$HOME/.local/share/remote-connect.log
 
 get_parameter() {
 	cat ${CFG_FILE} | grep "${1}=" | sed "s/${1}=//"
+}
+
+do_connect() {
+	exec ${freerdp} /u:nsa /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper 2>${LOG_FILE}
 }
 
 [[ ! -f ${CFG_FILE} ]] && {
@@ -39,7 +44,7 @@ PASSWORD=$(openssl enc -aes-256-cbc -md sha512 -a -d -pbkdf2 -salt -pass pass:${
 		ARP_MAC=$(arp -n | grep ${IP_ADDR} | grep -E -o '([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}')
 		[[ ${ARP_MAC,,} == ${MAC_ADDR,,} ]] && {
 			# we're done
-			exec ${freerdp} /u:"${USER}" /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper
+			do_connect
 		} || {
 			cat ${CFG_FILE} | sed -i -e 's/ip.*//'  -e '/^[[:space:]]*$/d' ${CFG_FILE}
 		}
@@ -57,5 +62,5 @@ command -v nmap > /dev/null || {
 IP_ADDR=$(pkexec nmap -sn ${NET_ADDR} | grep -C2 -i ${MAC_ADDR} | head -1 | grep -Eo '([[:digit:]]{1,3}.){3}[[:digit:]]{1,3}')
 [[ -n ${IP_ADDR} ]] && echo "ip=${IP_ADDR}" >> ${CFG_FILE}
 
-exec ${freerdp} /u:"${USER}" /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper
+do_connect
 
