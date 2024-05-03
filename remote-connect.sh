@@ -35,11 +35,14 @@ PASSWORD=$(openssl enc -aes-256-cbc -md sha512 -a -d -pbkdf2 -salt -pass pass:${
 [[ -n ${IP_ADDR} ]] && {
 	ARP_MAC=""
 
-	ping ${IP_ADDR} -c 1 > /dev/null
-	ARP_MAC=$(arp -n | grep ${IP_ADDR} | grep -E -o '([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}')
-	[[ ${ARP_MAC,,} == ${MAC_ADDR,,} ]] && {
-		# we're done
-		exec ${freerdp} /u:"${USER}" /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper
+	ping ${IP_ADDR} -c 1 > /dev/null && {
+		ARP_MAC=$(arp -n | grep ${IP_ADDR} | grep -E -o '([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}')
+		[[ ${ARP_MAC,,} == ${MAC_ADDR,,} ]] && {
+			# we're done
+			exec ${freerdp} /u:"${USER}" /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper
+		} || {
+			cat ${CFG_FILE} | sed -i -e 's/ip.*//'  -e '/^[[:space:]]*$/d' ${CFG_FILE}
+		}
 	} || {
 		cat ${CFG_FILE} | sed -i -e 's/ip.*//'  -e '/^[[:space:]]*$/d' ${CFG_FILE}
 	}
