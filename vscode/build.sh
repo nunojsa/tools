@@ -11,8 +11,7 @@ set -e
 opt=""
 vivado=""
 version=$(cat Makefile | grep -e "VERSION *= *[0-9]" | cut -d "=" -f2 | tr -d " ")
-patchevel=$(cat Makefile | grep -e "PATCHLEVEL *= *[0-9]" | cut -d "=" -f2 | tr -d " ")
-full_ver="${version}.${patchevel}"
+patchlevel=$(cat Makefile | grep -e "PATCHLEVEL *= *[0-9]" | cut -d "=" -f2 | tr -d " ")
 
 case "${1}" in
 "C=2")
@@ -25,7 +24,7 @@ case "${1}" in
 	file=${2/.dts/.dtb}
 	if [[ ${file} =~ .*-overlay.dtb ]]; then
 		file="overlays/"$(sed 's/-overlay.dtb//' <<<$(basename ${file}))".dtbo"
-	elif [[ ${full_ver} > "6.4" || ${arch} == "arm64" ]]; then
+	elif (( ${version} > "5" && ${patchlevel} > "4" )) || [[ ${arch} == "arm64" ]]; then
 		file=$(sed 's;.*boot/dts/;;' <<<${file})
 	else
 		file=$(basename ${file})
