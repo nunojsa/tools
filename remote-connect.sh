@@ -33,6 +33,8 @@ PASSWORD=$(get_parameter password)
 USER=$(get_parameter user)
 
 # get encryption key (using zenity for getting a prompt)
+# to encrypt a new passord:
+# 	echo "New pass" | openssl enc -aes-256-cbc -md sha512 -a -pbkdf2 -salt -pass pass:${descrypt_pass}
 descrypt_pass="$(zenity --password --title="Decryption password")"
 PASSWORD=$(openssl enc -aes-256-cbc -md sha512 -a -d -pbkdf2 -salt -pass pass:${descrypt_pass} <<<${PASSWORD}) 
 
