@@ -67,6 +67,7 @@ ping ${IP_ADDR} -c 1 > /dev/null && {
 	echo "ip=${IP_ADDR}" >> ${CFG_FILE}
 } || {
 	zenity --error --text "Cannot reach IP=${IP_ADDR}" --title "Remote Connect"
+	exit 1
 }
 do_connect
 
