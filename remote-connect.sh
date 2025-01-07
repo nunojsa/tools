@@ -15,7 +15,7 @@ do_connect() {
 	${freerdp} /u:nsa /p:"${PASSWORD}" /v:${IP_ADDR} /sound /audio-mode:1 /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper 2>${LOG_FILE} &
 	# The logic here is to wait for 5 seconds for freerdp to exit. If that happens, it means we got an error
 	# so that we dump the log. Hence if get 124 (timeout) we assume success!
-	timeout 5 tail --pid $! -f /dev/null
+	timeout 10 tail --pid $! -f /dev/null
 	[[ $? == 124 ]] && exit 0 || {
 		zenity --text-info --title "Error xfreerdp log" --width=1000 --height=700 --filename ${LOG_FILE}
 		exit 1
