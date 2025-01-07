@@ -165,9 +165,9 @@ endif
 let g:airline_powerline_fonts = 1
 
 " airline symbols
-let g:airline_symbols.linenr = ' ☰ '
+let g:airline_symbols.linenr = ' ln:'
 let g:airline_symbols.colnr = ' :'
-let g:airline_symbols.maxlinenr = ' ln '
+let g:airline_symbols.maxlinenr = ' '
 
 " GutenTags
 let g:gutentags_generate_on_missing = 0
