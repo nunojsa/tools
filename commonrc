@@ -45,28 +45,32 @@ bbgrep() {
 # petalinux wrappers. Assumption is that we run the command either from the installation dir or from
 # the project topdir. Makes things easier and it covers 99% od the cases
 petalinux-build() {
-	[[ -f settings.sh ]] && local settings="settings.sh" || local settings="../settings.sh"
+	local peta_path=${PETA_PATH:-..}
+	[[ -f settings.sh ]] && local settings="settings.sh" || local settings="${peta_path}/settings.sh"
 	local args="$@"
 
 	drun petalinux bash -c "source ${settings} 1>/dev/null; petalinux-build $args"
 }
 
 petalinux-config() {
-	[[ -f settings.sh ]] && local settings="settings.sh" || local settings="../settings.sh"
+	local peta_path=${PETA_PATH:-..}
+	[[ -f settings.sh ]] && local settings="settings.sh" || local settings="${peta_path}/settings.sh"
 	local args="$@"
 
 	drun petalinux bash -c "source ${settings} 1>/dev/null; petalinux-config $args"
 }
 
 petalinux-create() {
-	[[ -f settings.sh ]] && local settings="settings.sh" || local settings="../settings.sh"
+	local peta_path=${PETA_PATH:-..}
+	[[ -f settings.sh ]] && local settings="settings.sh" || local settings="${peta_path}/settings.sh"
 	local args="$@"
 
 	drun petalinux bash -c "source ${settings} 1>/dev/null; petalinux-create $args"
 }
 
 petalinux-package() {
-	[[ -f settings.sh ]] && local settings="settings.sh" || local settings="../settings.sh"
+	local peta_path=${PETA_PATH:-..}
+	[[ -f settings.sh ]] && local settings="settings.sh" || local settings="${peta_path}/settings.sh"
 	local args="$@"
 
 	drun petalinux bash -c "source ${settings} 1>/dev/null; petalinux-package $args"
