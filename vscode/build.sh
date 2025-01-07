@@ -45,4 +45,4 @@ esac
 	[[ -d ${vivado} ]] && source ${vivado}/Vivado/*/settings64.sh
 }
 
-make ARCH=${arch} CROSS_COMPILE=${cross_compile} CC=clang ${opt} ${file} -j$(nproc)
+make ARCH=${arch} LLVM=1 ${opt} ${file} -j$(nproc)
