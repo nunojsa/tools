@@ -1,0 +1,47 @@
+[user]
+	email = nuno.sa@analog.com
+	name = Nuno Sá
+[credential]
+	helper = store
+[diff]
+	tool = meld
+	algorithm = histogram
+	colorMoved = plain
+	renames = true
+	mnemonicPrefix = true
+[grep]
+	lineNumber = on
+[core]
+        abbrev = 12
+[pretty]
+        fixes = Fixes: %h (\"%s\")
+[push]
+	default = current
+	autoSetupRemote = true
+[b4]
+	send-endpoint-web = https://lkml.kernel.org/_b4_submit
+[alias]
+	pushfwl = push --force-with-lease
+	fixes = show -s --pretty='format:Fixes: %h (\"%s\")'
+[maintenance]
+	repo = /home/nsa/work/linux
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[fetch]
+	prune = true
+[help]
+	autocorrect = prompt
+[commit]
+	verbose = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[rebase]
+	autoSquash = true
+	updateRefs = true
+[color]
+	ui = auto
