@@ -35,14 +35,4 @@ case "${1}" in
 	;;
 esac
 
-# this env should be set in task.json if we don't want to look for a vivado installation
-[[ ${no_vivado} != "y" ]] && {
-	vivado=$(ls -d $HOME/work/Vivado_* 2>/dev/null | sort | tail -1)
-
-	# I'm aware this will break if Xilinx changes the directory tree but using 'find'
-	# was taking some __annoying__ time so I prefer fix this (if I ever have to) when
-	# the time comes...
-	[[ -d ${vivado} ]] && source ${vivado}/Vivado/*/settings64.sh
-}
-
 make ARCH=${arch} LLVM=1 ${opt} ${file} -j$(nproc)
