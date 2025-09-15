@@ -45,7 +45,10 @@ USER=$(get_parameter user)
 # to encrypt a new passord:
 # 	echo "New pass" | openssl enc -aes-256-cbc -md sha512 -a -pbkdf2 -salt -pass pass:${descrypt_pass}
 descrypt_pass="$(zenity --password --title="Decryption password")"
-PASSWORD=$(openssl enc -aes-256-cbc -md sha512 -a -d -pbkdf2 -salt -pass pass:${descrypt_pass} <<<${PASSWORD}) 
+PASSWORD=$(openssl enc -aes-256-cbc -md sha512 -a -d -pbkdf2 -salt -pass pass:${descrypt_pass} <<<${PASSWORD}) || {
+	zenity --error --text "Cannot decrypt remote password!"
+	exit 1
+}
 
 # fastpath: Let's do a ping for the given ip and check the arp table. If MAC matches, we're good to go...
 [[ -n ${IP_ADDR} ]] && {
