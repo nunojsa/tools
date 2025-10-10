@@ -86,3 +86,5 @@ if [ -x "$(command -v tmux)" ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
 	fi
 fi
 
+[[ -f "$HOME/.customrc" ]] && . "$HOME/.customrc"
+
