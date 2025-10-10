@@ -71,6 +71,7 @@ bindkey '^[[B' down-autocd-or-line-or-menu
 
 zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path "$HOME/.cache/zsh/compcache"
+zstyle ':completion:*' rehash true
 
 zstyle -e ':completion:*' completer _expand _complete _correct _approximate _prefix _ignored
 zstyle ':completion:*' menu select
