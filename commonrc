@@ -7,7 +7,7 @@
 alias ssh_no_hosts='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias scp_no_hosts='scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 
-export PATH=$PATH:$HOME/.tools/:$HOME/.tools/git-series-push/:$HOME/.local/bin/
+export PATH=$HOME/.local/bin:$HOME/.tools/:$HOME/.tools/git-series-push/:$PATH
 
 command -v arm-linux-gnueabihf-gcc > /dev/null && {
 	alias cross_cc_arm='export ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
