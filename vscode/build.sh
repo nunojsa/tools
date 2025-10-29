@@ -12,6 +12,7 @@ opt=""
 vivado=""
 version=$(cat Makefile | grep -e "VERSION *= *[0-9]" | cut -d "=" -f2 | tr -d " ")
 patchlevel=$(cat Makefile | grep -e "PATCHLEVEL *= *[0-9]" | cut -d "=" -f2 | tr -d " ")
+extra=""
 
 case "${1}" in
 "C=2")
@@ -35,4 +36,19 @@ case "${1}" in
 	;;
 esac
 
-make ARCH=${arch} LLVM=1 ${opt} ${file} -j$(nproc)
+[ -f .config ] && {
+	if grep -o -q CONFIG_ARM64 .config; then
+		arch=arm64
+		[[ -z ${opt} ]] && extra="Image compile_commands.json"
+	elif grep -o -q CONFIG_ARM .config; then
+		arch=arm
+		# Improve this to handle RPI. We should be able to detect RPI build from .config
+		[[ -z ${opt} ]] && extra="uImage UIMAGE_LOADADDR=0x8000 modules compile_commands.json"
+	else
+		echo "Cannot grep any known ARCH"
+		exit 1
+	fi
+}
+
+make KCFLAGS="-Wno-enum-enum-conversion" ARCH=${arch} LLVM=1 ${opt} ${file} -j$(nproc) ${extra}
+
