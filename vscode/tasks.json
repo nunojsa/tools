@@ -18,6 +18,23 @@
             }
         },
         {
+            "label": "Build With Dynamic Args",
+            "type": "shell",
+            "command": "$HOME/.tools/vscode/build.sh",
+            "args": [
+                "${input:build_args}"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
             "label": "Clean",
             "type": "shell",
             "command": "$HOME/.tools/vscode/build.sh",
@@ -216,6 +233,14 @@
                 "panel": "new"
             },
             "group": "build"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "build_args",
+            "description": "Build argument",
+            "default": "",
+            "type": "promptString"
         }
     ]
 }
