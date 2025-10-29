@@ -92,6 +92,21 @@
             "group": "build"
         },
         {
+            "label": "Driver W=1 build",
+            "type": "shell",
+            "command": "$HOME/.tools/vscode/build.sh",
+            "args": [
+                "W=1",
+                "${file}"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "group": "build"
+        },
+        {
             "label": "Devicetree",
             "type": "shell",
             "command": "$HOME/.tools/vscode/build.sh",
