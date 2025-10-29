@@ -40,8 +40,8 @@ handle_microblaze() {
 [[ -z ${2} ]] && set -- $1
 
 case "${1}" in
-"C=2")
-	# used for sparse
+"C=2"|"W=1")
+	# used for sparse and W=1 builds
 	file=${2/.c/.o}
 	file=$(sed "s;${PWD}/;;" <<<${file})
 	opt="${1}"
