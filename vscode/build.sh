@@ -70,7 +70,7 @@ esac
 [ -f .config ] && {
 	if grep -o -q CONFIG_ARM64 .config; then
 		arch=arm64
-		[[ -z ${opt} ]] && extra="Image compile_commands.json"
+		[[ -z ${opt} ]] && extra="Image modules compile_commands.json"
 	elif grep -o -q CONFIG_ARM .config; then
 		arch=arm
 		# Improve this to handle RPI. We should be able to detect RPI build from .config
