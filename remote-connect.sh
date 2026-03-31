@@ -12,7 +12,7 @@ get_parameter() {
 do_connect() {
 	# make sure we get the latest log
 	rm -f ${LOG_FILE}
-	${freerdp} /u:nsa /d:ANALOG /p:"${PASSWORD}" /v:${IP_ADDR} /sound /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper 2>${LOG_FILE} &
+	${freerdp} /u:nsa /d:ANALOG /p:"${PASSWORD}" /v:${IP_ADDR} /sound /cert:ignore /microphone /multimon /gfx +clipboard +decorations +fonts -wallpaper ${RDP_ARGS} 2>${LOG_FILE} &
 	# The logic here is to wait for 5 seconds for freerdp to exit. If that happens, it means we got an error
 	# so that we dump the log. Hence if get 124 (timeout) we assume success!
 	timeout 10 tail --pid $! -f /dev/null
@@ -40,6 +40,7 @@ NET_ADDR=$(get_parameter net)
 IP_ADDR=$(get_parameter ip)
 PASSWORD=$(get_parameter password)
 USER=$(get_parameter user)
+RDP_ARGS=$(get_parameter rdp_args)
 
 # get encryption key (using zenity for getting a prompt)
 # to encrypt a new passord:
