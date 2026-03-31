@@ -23,6 +23,7 @@
 [alias]
 	pushfwl = push --force-with-lease
 	fixes = show -s --pretty='format:Fixes: %h (\"%s\")'
+	line-ownership = "!f(){ git blame -w --line-porcelain \"$1\" | grep \"^author \" | sed \"s/^author //\" | sort | uniq -c | awk '{count=$1; $1=\"\"; author=substr($0,2); total+=count; counts[author]+=count} END {for (a in counts) printf \"%-25s %6.2f%% (%d lines)\\n\", a, (counts[a]/total)*100, counts[a]}' | sort -k2 -nr; }; f"
 [maintenance]
 	repo = /home/nsa/work/linux
 [column]
@@ -45,3 +46,4 @@
 	updateRefs = true
 [color]
 	ui = auto
+
