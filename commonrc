@@ -76,6 +76,13 @@ petalinux-package() {
 	drun petalinux bash -c "source ${settings} 1>/dev/null; petalinux-package $args"
 }
 
+portkey-models() {
+	local pipe_filter=(jq)
+
+	[[ $1 == "--ids" ]] && pipe_filter=(jq -r '.data[].id')
+	curl -s 'https://api.portkey.ai/v1/models' -H "x-portkey-api-key: ${PORTKEY_API_KEY}" | "${pipe_filter[@]}"
+}
+
 if [ -x "$(command -v tmux)" ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
 	if ! systemctl --user is-active --quiet tmux-desktop.service; then
 		systemctl --user start tmux-desktop.service
