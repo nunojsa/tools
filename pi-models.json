@@ -1,0 +1,87 @@
+{
+  "providers": {
+    "portkey-anthropic": {
+      "baseUrl": "https://api.portkey.ai",
+      "api": "anthropic-messages",
+      "apiKey": "portkey",
+      "headers": {
+        "x-portkey-api-key": "$PORTKEY_API_KEY"
+      },
+      "models": [
+        {
+          "id": "@vertexai-global/anthropic.claude-sonnet-4-5@20250929",
+          "name": "Claude Sonnet 4.5 (via Vertex)",
+          "contextWindow": 200000,
+          "maxTokens": 64000,
+          "reasoning": true
+        },
+        {
+          "id": "@vertexai-global/anthropic.claude-opus-4-6",
+          "name": "Claude Opus 4.6 (1M context via Vertex)",
+          "contextWindow": 1000000,
+          "maxTokens": 128000,
+          "reasoning": true
+        },
+        {
+          "id": "@gcp-vertexai-us-global-integration/anthropic.claude-opus-4-8",
+          "name": "Claude Opus 4.8 (via Vertex)",
+          "contextWindow": 1000000,
+          "maxTokens": 128000,
+          "reasoning": true,
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        {
+          "id": "@bedrock-global/us.anthropic.claude-opus-4-6-v1",
+          "name": "Claude Opus 4.6 (via Bedrock)",
+          "contextWindow": 1000000,
+          "maxTokens": 128000,
+          "reasoning": true
+        },
+        {
+          "id": "@bedrock-global/us.anthropic.claude-opus-4-8",
+          "name": "Claude Opus 4.8 (via Bedrock)",
+          "contextWindow": 1000000,
+          "maxTokens": 128000,
+          "reasoning": true,
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        {
+          "id": "@bedrock-global/us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+          "name": "Claude Sonnet 4.5 (via Bedrock)",
+          "contextWindow": 200000,
+          "maxTokens": 64000,
+          "reasoning": true,
+          "compat": {
+            "supportsEagerToolInputStreaming": false
+          }
+        }
+      ]
+    },
+    "portkey-openai": {
+      "baseUrl": "https://api.portkey.ai/v1",
+      "api": "openai-completions",
+      "apiKey": "portkey",
+      "headers": {
+        "x-portkey-api-key": "$PORTKEY_API_KEY"
+      },
+      "models": [
+        {
+          "id": "@azure-openai-eus-global/gpt-5.5-mini-dzs",
+          "name": "GPT 5.5 mini (via azure)",
+          "contextWindow": 400000,
+          "maxTokens": 128000
+        },
+        {
+          "id": "@azure-openai-eus2-global/gpt-5.5-dzs",
+          "name": "GPT 5.5 (via azure)",
+          "contextWindow": 400000,
+          "maxTokens": 128000
+        }
+      ]
+    }
+  }
+}
