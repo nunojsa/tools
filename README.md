@@ -15,6 +15,7 @@ This repo contains a set of miscalaneous tools/scripts and configuration files u
 |git-series-push/| git-publish based tool for sending patcheseries|
 |vscode/| vscode related bits|
 |tmux/| tmux related configurations|
+|pi-models| Models configuration for Pi Agent|
 
 # Contributions
 
