@@ -84,5 +84,6 @@ esac
 	fi
 }
 
-make KCFLAGS="-Wno-enum-enum-conversion" ARCH=${arch} ${WITH_LLVM} ${WITH_CROSS_COMPILE} ${opt} ${file} -j$(nproc) ${extra}
+export KCFLAGS="-Wno-enum-enum-conversion -Wno-default-const-init-unsafe"
+make ARCH=${arch} ${WITH_LLVM} ${WITH_CROSS_COMPILE} ${opt} ${file} -j$(nproc) ${extra}
 
