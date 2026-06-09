@@ -3,253 +3,252 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "Build",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "Build With Dynamic Args",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "${input:build_args}"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "Clean",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "clean"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "Distclean",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "mrproper"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "Config",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "menuconfig"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "Sparse",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "C=2",
-                "${file}"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "Driver W=1 build",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "W=1",
-                "${file}"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "Devicetree",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "-d",
-                "${file}"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "Defconfig Zynq",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "zynq_xcomm_adv7511_defconfig"
-            ],
-            "options": {
-                "env": {
-                    "arch": "arm"
-                }
-            },
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "Defconfig RPI4",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "adi_bcm2711_defconfig"
-            ],
-            "options": {
-                "env": {
-                    "arch": "arm"
-                }
-            },
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "Defconfig ZynqMP",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "adi_zynqmp_defconfig"
-            ],
-            "options": {
-                "env": {
-                    "arch": "arm64"
-                }
-            },
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "Defconfig Microblaze",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "adi_mb_defconfig"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-         {
-            "label": "Defconfig ARM MULTI PLATFORM",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "multi_v7_defconfig"
-            ],
-            "options": {
-                "env": {
-                    "arch": "arm"
-                }
-            },
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "ARM64 All Y Defconfig",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "allyesconfig"
-            ],
-            "options": {
-                "env": {
-                    "arch": "arm64"
-                }
-            },
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        },
-        {
-            "label": "ARM All Y Defconfig",
-            "type": "shell",
-            "command": "$HOME/.tools/vscode/build.sh",
-            "args": [
-                "allyesconfig"
-            ],
-            "options": {
-                "env": {
-                    "arch": "arm"
-                }
-            },
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "group": "build"
-        }
-    ],
+	{
+		"label": "Build",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": {
+			"kind": "build",
+			"isDefault": true
+		}
+	},
+	{
+		"label": "Build With Dynamic Args",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"${input:build_args}"
+		],
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": {
+			"kind": "build"
+		}
+	},
+	{
+		"label": "Clean",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"clean"
+		],
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Distclean",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"mrproper"
+		],
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Config",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"menuconfig"
+		],
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Sparse",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"C=2",
+			"${file}"
+		],
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Driver W=1 build",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"W=1",
+			"${file}"
+		],
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Devicetree",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"-d",
+			"${file}"
+		],
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Defconfig Zynq",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"zynq_xcomm_adv7511_defconfig"
+		],
+		"options": {
+			"env": {
+				"arch": "arm"
+			}
+		},
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Defconfig RPI4",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"bcm2711_defconfig"
+		],
+		"options": {
+			"env": {
+				"arch": "arm64"
+			}
+		},
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Defconfig ZynqMP",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"adi_zynqmp_defconfig"
+		],
+		"options": {
+			"env": {
+				"arch": "arm64"
+			}
+		},
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Defconfig Microblaze",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"adi_mb_defconfig"
+		],
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "Defconfig ARM MULTI PLATFORM",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"multi_v7_defconfig"
+		],
+		"options": {
+			"env": {
+				"arch": "arm"
+			}
+		},
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "ARM64 All Y Defconfig",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"allyesconfig"
+		],
+		"options": {
+			"env": {
+				"arch": "arm64"
+			}
+		},
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	},
+	{
+		"label": "ARM All Y Defconfig",
+		"type": "shell",
+		"command": "$HOME/.tools/vscode/build.sh",
+		"args": [
+			"allyesconfig"
+		],
+		"options": {
+			"env": {
+				"arch": "arm"
+			}
+		},
+		"problemMatcher": [],
+		"presentation": {
+			"reveal": "always",
+			"panel": "new"
+		},
+		"group": "build"
+	}
+],
     "inputs": [
         {
             "id": "build_args",
