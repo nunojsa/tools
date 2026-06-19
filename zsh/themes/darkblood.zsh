@@ -6,9 +6,12 @@ setopt prompt_subst
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 venv_prompt() {
-  [[ -n $VIRTUAL_ENV_PROMPT ]] || return
+  [[ -n $VIRTUAL_ENV ]] || return
+  # VIRTUAL_ENV_PROMPT is only exported by venv since Python 3.13; older
+  # versions (and other tools) only set VIRTUAL_ENV, so fall back to its name.
+  local name=${VIRTUAL_ENV_PROMPT:-${VIRTUAL_ENV:t}}
   # VIRTUAL_ENV_PROMPT carries surrounding parens/space; strip them for the box.
-  local name=${${VIRTUAL_ENV_PROMPT## }%% }
+  name=${${name## }%% }
   name=${name#\(}; name=${name%\)}
   print -n -- "[%{$fg_bold[yellow]%}${name}%{$reset_color%}%{$fg[magenta]%}]"
 }
